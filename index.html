@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATHS · تسجيل دخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0f2b3d, #1a4a5f);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-wrapper {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 48px;
+            padding: 45px 40px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+        }
+
+        .math-logo {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #0f2b3d, #1f6c7f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2eef5;
+            color: #3a6b7a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .step.active .step-number {
+            background: #1f6c7f;
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.9rem;
+            color: #4a6f7c;
+            font-weight: 600;
+        }
+
+        .step.active .step-text {
+            color: #1f6c7f;
+        }
+
+        .form-step {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-step.active {
+            display: flex;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #f4fafd;
+            border-radius: 40px;
+            padding: 5px 25px;
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+
+        .input-group:focus-within {
+            border-color: #1f6c7f;
+            background: white;
+        }
+
+        .input-group i {
+            color: #3f7e93;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 0;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .btn {
+            background: #1f6c7f;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #0a4b5c;
+            transform: scale(1.02);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 30px;
+            font-weight: 600;
+            display: none;
+            margin-top: 10px;
+        }
+
+        .success-msg {
+            background: #e1ffe8;
+            color: #1d6b47;
+            border: 1px solid #a3e0b6;
+        }
+
+        .error-msg {
+            background: #ffe8e8;
+            color: #c14444;
+            border: 1px solid #ffb3b3;
+        }
+
+        .info-text {
+            color: #4a6f7c;
+            font-size: 0.95rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .resend-link {
+            color: #1f6c7f;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            text-align: center;
+            margin-top: 15px;
+            color: #4a6f7c;
+        }
+
+        .forgot-link span {
+            color: #1f6c7f;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="math-logo">MATHS</div>
+
+        <!-- خطوات التسجيل -->
+        <div class="step-indicator">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-text">الحساب</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-text">التأكيد</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-text">دخول</div>
+            </div>
+        </div>
+
+        <!-- ===== STEP 1 ===== -->
+        <div id="step1Form" class="form-step active">
+            <!-- أزرار التبديل -->
+            <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <button id="loginTabBtn" onclick="showLoginForm()" style="background: none; border: none; font-size: 1.2rem; font-weight: 700; color: #1f6c7f; border-bottom: 3px solid #1f6c7f; padding-bottom: 5px; cursor: pointer;">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل دخول
+                </button>
+                <button id="signupTabBtn" onclick="showSignupForm()" style="background: none; border: none; font-size: 1.2rem; font-weight: 600; color: #4a6f7c; padding-bottom: 5px; cursor: pointer;">
+                    <i class="fas fa-user-plus"></i> حساب جديد
+                </button>
+            </div>
+
+            <!-- تسجيل دخول -->
+            <div id="loginFields">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="كلمة السر">
+                </div>
+                <button class="btn" onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل دخول
+                </button>
+                <div class="forgot-link">
+                    <span onclick="showForgotPasswordForm()">نسيت كلمة السر؟</span>
+                </div>
+            </div>
+
+            <!-- إنشاء حساب جديد -->
+            <div id="signupFields" class="hidden">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signupName" placeholder="الاسم الكامل">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signupEmail" placeholder="البريد الإلكتروني">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signupPassword" placeholder="كلمة السر (6 أحرف فأكثر)">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signupConfirmPassword" placeholder="تأكيد كلمة السر">
+                </div>
+                <button class="btn" onclick="handleSignup()">
+                    <i class="fas fa-user-plus"></i> إنشاء حساب
+                </button>
+            </div>
+
+            <!-- نسيت كلمة السر -->
+            <div id="forgotFields" class="hidden">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i class="fas fa-key" style="font-size: 2.5rem; color: #1f6c7f;"></i>
+                    <h3 style="color: #0a4b5c; margin: 10px 0;">استعادة كلمة السر</h3>
+                    <p style="color: #4a6f7c;">أدخل بريدك الإلكتروني</p>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="forgotEmail" placeholder="البريد الإلكتروني">
+                </div>
+                <button class="btn" onclick="handleForgotPassword()">
+                    <i class="fas fa-paper-plane"></i> إرسال كود الاستعادة
+                </button>
+                <div class="forgot-link">
+                    <span onclick="showLoginForm()">العودة لتسجيل الدخول</span>
+                </div>
+            </div>
+
+            <div id="step1Message" class="message"></div>
+        </div>
+
+        <!-- ===== STEP 2: كود التأكيد ===== -->
+        <div id="step2Form" class="form-step">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fas fa-envelope-open-text" style="font-size: 3rem; color: #1f6c7f;"></i>
+                <h3 style="color: #0a4b5c; margin: 15px 0;" id="step2Title">تأكيد البريد الإلكتروني</h3>
+                <p style="color: #4a6f7c;" id="emailDisplay"></p>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input type="text" id="codeInput" placeholder="كود التأكيد (6 أرقام)" maxlength="6">
+            </div>
+            <button class="btn" onclick="verifyCode()">
+                <i class="fas fa-check-circle"></i> تأكيد
+            </button>
+            <div id="step2Message" class="message"></div>
+            <div class="info-text">
+                لم يصلك الكود؟ <span class="resend-link" onclick="resendCode()">إعادة إرسال</span>
+            </div>
+        </div>
+
+        <!-- ===== STEP 3: نجاح ===== -->
+        <div id="step3Form" class="form-step">
+            <div style="text-align: center; padding: 30px 0;">
+                <i class="fas fa-check-circle" style="font-size: 5rem; color: #1f6c7f;"></i>
+                <h2 style="color: #0a4b5c; margin: 20px 0 10px;" id="successTitle">تم بنجاح!</h2>
+                <p style="color: #4a6f7c; font-size: 1.1rem; margin-bottom: 20px;" id="successMessage">
+                    جاري تحويلك...
+                </p>
+                <i class="fas fa-spinner fa-pulse" style="font-size: 2rem; color: #1f6c7f;"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ✅ المفاتيح الصحيحة - شغالة 100%
+        emailjs.init("8s2EbSp8ouAhUquMS");
+        
+        const SERVICE_ID = "service_t4vqjm8";
+        const TEMPLATE_ID = "template_nbze6tt";
+        
+        // متغيرات عامة
+        let currentUser = { email: '', name: '', password: '' };
+        let currentCode = '';
+        let currentAction = 'login';
+
+        // ========== دوال التبديل ==========
+        window.showLoginForm = function() {
+            document.getElementById('loginFields').classList.remove('hidden');
+            document.getElementById('signupFields').classList.add('hidden');
+            document.getElementById('forgotFields').classList.add('hidden');
+            
+            document.getElementById('loginTabBtn').style.color = '#1f6c7f';
+            document.getElementById('loginTabBtn').style.borderBottom = '3px solid #1f6c7f';
+            document.getElementById('signupTabBtn').style.color = '#4a6f7c';
+            document.getElementById('signupTabBtn').style.borderBottom = 'none';
+            
+            document.getElementById('loginTabBtn').style.display = 'block';
+            document.getElementById('signupTabBtn').style.display = 'block';
+            
+            currentAction = 'login';
+        };
+
+        window.showSignupForm = function() {
+            document.getElementById('loginFields').classList.add('hidden');
+            document.getElementById('signupFields').classList.remove('hidden');
+            document.getElementById('forgotFields').classList.add('hidden');
+            
+            document.getElementById('signupTabBtn').style.color = '#1f6c7f';
+            document.getElementById('signupTabBtn').style.borderBottom = '3px solid #1f6c7f';
+            document.getElementById('loginTabBtn').style.color = '#4a6f7c';
+            document.getElementById('loginTabBtn').style.borderBottom = 'none';
+            
+            document.getElementById('loginTabBtn').style.display = 'block';
+            document.getElementById('signupTabBtn').style.display = 'block';
+            
+            currentAction = 'signup';
+        };
+
+        window.showForgotPasswordForm = function() {
+            document.getElementById('loginFields').classList.add('hidden');
+            document.getElementById('signupFields').classList.add('hidden');
+            document.getElementById('forgotFields').classList.remove('hidden');
+            
+            document.getElementById('loginTabBtn').style.display = 'none';
+            document.getElementById('signupTabBtn').style.display = 'none';
+            
+            currentAction = 'reset';
+        };
+
+        // ========== إنشاء حساب ==========
+        window.handleSignup = function() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const confirmPassword = document.getElementById('signupConfirmPassword').value.trim();
+            const msgBox = document.getElementById('step1Message');
+
+            if (!name || !email || !password || !confirmPassword) {
+                showMessage(msgBox, '❌ جميع الحقول مطلوبة', 'error'); return;
+            }
+            if (password.length < 6) {
+                showMessage(msgBox, '❌ كلمة السر 6 أحرف على الأقل', 'error'); return;
+            }
+            if (password !== confirmPassword) {
+                showMessage(msgBox, '❌ كلمة السر غير متطابقة', 'error'); return;
+            }
+            if (!validateEmail(email)) {
+                showMessage(msgBox, '❌ البريد الإلكتروني غير صحيح', 'error'); return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(u => u.email === email)) {
+                showMessage(msgBox, '❌ هذا البريد مسجل بالفعل', 'error'); return;
+            }
+
+            const newUser = { name, email, password };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            currentUser = newUser;
+            sendVerificationCode(email, name, 'signup');
+            showMessage(msgBox, '✅ تم إنشاء الحساب! جاري إرسال الكود...', 'success');
+        };
+
+        // ========== تسجيل دخول ==========
+        window.handleLogin = function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const msgBox = document.getElementById('step1Message');
+
+            if (!email || !password) {
+                showMessage(msgBox, '❌ البريد وكلمة السر مطلوبان', 'error'); return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (!user) {
+                showMessage(msgBox, '❌ البريد أو كلمة السر غير صحيحة', 'error'); return;
+            }
+
+            currentUser = user;
+            sendVerificationCode(email, user.name, 'login');
+        };
+
+        // ========== نسيت كلمة السر ==========
+        window.handleForgotPassword = function() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            const msgBox = document.getElementById('step1Message');
+
+            if (!email) {
+                showMessage(msgBox, '❌ أدخل البريد الإلكتروني', 'error'); return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email);
+
+            if (!user) {
+                showMessage(msgBox, '❌ هذا البريد غير مسجل', 'error'); return;
+            }
+
+            currentUser = user;
+            localStorage.setItem('resetEmail', email);
+            
+            document.getElementById('step2Title').innerText = 'إعادة تعيين كلمة السر';
+            sendVerificationCode(email, user.name, 'reset');
+            showMessage(msgBox, '✅ جاري إرسال كود إعادة التعيين...', 'success');
+        };
+
+        // ========== إرسال كود التأكيد ==========
+        function sendVerificationCode(email, name, action) {
+            currentCode = Math.floor(100000 + Math.random() * 900000).toString();
+            currentAction = action;
+            
+            document.getElementById('emailDisplay').innerHTML = `<i class="fas fa-envelope"></i> ${email}`;
+            
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+                to_email: email,
+                to_name: name || email.split('@')[0],
+                verification_code: currentCode,
+                time: new Date().toLocaleString('ar-EG')
+            }).then(function() {
+                console.log('📧 الكود:', currentCode);
+                
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+                document.getElementById('step1Form').classList.remove('active');
+                document.getElementById('step2Form').classList.add('active');
+                
+                showMessage(document.getElementById('step2Message'), '✅ تم إرسال الكود إلى بريدك', 'success');
+            }).catch(function(error) {
+                console.error('❌ فشل الإرسال:', error);
+                showMessage(document.getElementById('step1Message'), '❌ فشل إرسال الكود', 'error');
+            });
+        }
+
+        // ========== التحقق من الكود ==========
+        window.verifyCode = function() {
+            const code = document.getElementById('codeInput').value.trim();
+            const msgBox = document.getElementById('step2Message');
+
+            if (!code) {
+                showMessage(msgBox, '❌ أدخل كود التأكيد', 'error'); return;
+            }
+            if (code.length !== 6 || !/^\d+$/.test(code)) {
+                showMessage(msgBox, '❌ الكود 6 أرقام فقط', 'error'); return;
+            }
+
+            if (code === currentCode) {
+                showMessage(msgBox, '✅ تم التحقق بنجاح!', 'success');
+                
+                if (currentAction === 'signup' || currentAction === 'login') {
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        email: currentUser.email,
+                        name: currentUser.name || currentUser.email.split('@')[0]
+                    }));
+                    document.getElementById('successTitle').innerText = 'مرحباً بك!';
+                    document.getElementById('successMessage').innerText = 'جاري تحويلك إلى المنصة...';
+                    
+                    setTimeout(() => { window.location.href = 'home.html'; }, 2000);
+                } else if (currentAction === 'reset') {
+                    document.getElementById('successTitle').innerText = 'تم التحقق!';
+                    document.getElementById('successMessage').innerText = 'جاري تحويلك إلى صفحة تغيير كلمة السر...';
+                    
+                    setTimeout(() => { window.location.href = 'reset-password.html'; }, 2000);
+                }
+                
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step3').classList.add('active');
+                document.getElementById('step2Form').classList.remove('active');
+                document.getElementById('step3Form').classList.add('active');
+            } else {
+                showMessage(msgBox, '❌ كود غير صحيح', 'error');
+            }
+        };
+
+        // ========== إعادة إرسال الكود ==========
+        window.resendCode = function() {
+            currentCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+                to_email: currentUser.email,
+                to_name: currentUser.name || currentUser.email.split('@')[0],
+                verification_code: currentCode,
+                time: new Date().toLocaleString('ar-EG')
+            }).then(function() {
+                showMessage(document.getElementById('step2Message'), '✅ تم إعادة إرسال الكود', 'success');
+                console.log('📧 الكود الجديد:', currentCode);
+            }).catch(function(error) {
+                showMessage(document.getElementById('step2Message'), '❌ فشل إعادة الإرسال', 'error');
+            });
+        };
+
+        // ========== دوال مساعدة ==========
+        function showMessage(element, text, type) {
+            element.style.display = 'block';
+            element.textContent = text;
+            element.className = 'message ' + (type === 'error' ? 'error-msg' : 'success-msg');
+            setTimeout(() => { element.style.display = 'none'; }, 4000);
+        }
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        window.onload = function() {
+            const user = localStorage.getItem('currentUser');
+            if (user) window.location.href = 'home.html';
+        };
+    </script>
+</body>
+</html>

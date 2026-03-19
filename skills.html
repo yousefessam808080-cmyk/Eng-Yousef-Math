@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATHS · المهارات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            background: linear-gradient(145deg, #f5fafd, #eaf1f7);
+            padding: 2rem;
+        }
+        .container { max-width: 1300px; margin: 0 auto; }
+        
+        .header {
+            background: white;
+            border-radius: 30px;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f2b3d, #1f6c7f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .back-btn {
+            background: #e3f0f5;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            color: #1f6c7f;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .page-title {
+            font-size: 2.2rem;
+            color: #0a4b5c;
+            margin-bottom: 2rem;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .skill-card {
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .skill-icon {
+            font-size: 2.5rem;
+            color: #1f6c7f;
+            margin-bottom: 1rem;
+        }
+        .skill-title {
+            font-size: 1.5rem;
+            color: #0a4b5c;
+            margin-bottom: 0.5rem;
+        }
+        .progress {
+            background: #deecf2;
+            height: 10px;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #1f6c7f;
+            border-radius: 10px;
+            width: 0%;
+        }
+        .video-btn {
+            background: #1f6c7f;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">MATHS</div>
+            <a href="home.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+        </div>
+
+        <h1 class="page-title">📚 المهارات التعليمية</h1>
+
+        <div class="skills-grid">
+            <!-- مهارة 1 -->
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-square-root-alt"></i></div>
+                <h3 class="skill-title">الجبر</h3>
+                <p style="color: #4a6f7c;">المعادلات والمتطابقات</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 75%;"></div>
+                </div>
+                <span style="color: #1f6c7f;">75%</span>
+                <a href="#" class="video-btn"><i class="fas fa-play"></i> مشاهدة الفيديو</a>
+            </div>
+
+            <!-- مهارة 2 -->
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-infinity"></i></div>
+                <h3 class="skill-title">الأنماط</h3>
+                <p style="color: #4a6f7c;">الألغاز والتسلسلات</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 60%;"></div>
+                </div>
+                <span style="color: #1f6c7f;">60%</span>
+                <a href="#" class="video-btn"><i class="fas fa-play"></i> مشاهدة الفيديو</a>
+            </div>
+
+            <!-- مهارة 3 -->
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-chart-line"></i></div>
+                <h3 class="skill-title">الدوال</h3>
+                <p style="color: #4a6f7c;">التمثيل البياني</p>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 40%;"></div>
+                </div>
+                <span style="color: #1f6c7f;">40%</span>
+                <a href="#" class="video-btn"><i class="fas fa-play"></i> مشاهدة الفيديو</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

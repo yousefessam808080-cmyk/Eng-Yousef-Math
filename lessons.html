@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATHS · أكاديمية الفيديوهات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5fafd, #eaf1f7);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ===== الهيدر ===== */
+        .header {
+            background: white;
+            border-radius: 30px;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f2b3d, #1f6c7f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-btn {
+            background: #e3f0f5;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            color: #1f6c7f;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #cde2ec;
+        }
+
+        /* ===== عنوان الصفحة ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            color: #0a4b5c;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .video-count {
+            background: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: #1f6c7f;
+            font-weight: 600;
+            border: 1px solid #cde2ec;
+        }
+
+        /* ===== شريط البحث ===== */
+        .search-section {
+            background: white;
+            border-radius: 60px;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            border: 1px solid #e0ebf0;
+        }
+
+        .search-section i {
+            color: #7fa3b0;
+            font-size: 1.2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        /* ===== تصنيفات متقدمة ===== */
+        .categories-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .categories-list {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .category-item {
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            background: white;
+            color: #4a6f7c;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #e0ebf0;
+            transition: 0.2s;
+        }
+
+        .category-item.active {
+            background: #1f6c7f;
+            color: white;
+            border-color: #1f6c7f;
+        }
+
+        .category-item:hover {
+            background: #e3f0f5;
+        }
+
+        .sort-dropdown {
+            background: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            border: 1px solid #e0ebf0;
+            color: #1f6c7f;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ===== شبكة الفيديوهات ===== */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+            transition: 0.3s;
+            border: 1px solid #e0ebf0;
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px rgba(31, 108, 127, 0.12);
+            border-color: #1f6c7f;
+        }
+
+        .video-thumbnail {
+            height: 180px;
+            background: linear-gradient(145deg, #0f2b3d, #1a4a5f);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .play-button {
+            width: 55px;
+            height: 55px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1f6c7f;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .play-button:hover {
+            background: #1f6c7f;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0a4b5c;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-level {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .level-beginner { background: #e1ffe8; color: #1d6b47; }
+        .level-intermediate { background: #fff7e0; color: #a1662b; }
+        .level-advanced { background: #ffe8e8; color: #c14444; }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #4a6f7c;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #eaf1f7;
+        }
+
+        .video-teacher {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .video-views {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .video-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+        }
+
+        .video-tag {
+            background: #eef6fb;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1f6c7f;
+        }
+
+        .watch-btn {
+            background: transparent;
+            border: 2px solid #1f6c7f;
+            color: #1f6c7f;
+            padding: 0.7rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            width: 100%;
+        }
+
+        .watch-btn:hover {
+            background: #1f6c7f;
+            color: white;
+        }
+
+        /* ===== قسم الفئات ===== */
+        .featured-section {
+            background: white;
+            border-radius: 40px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #0a4b5c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-all {
+            color: #1f6c7f;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .playlists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .playlist-card {
+            background: #f8fcff;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #e0ebf0;
+            transition: 0.2s;
+        }
+
+        .playlist-card:hover {
+            background: white;
+            border-color: #1f6c7f;
+        }
+
+        .playlist-icon {
+            font-size: 2rem;
+            color: #1f6c7f;
+            margin-bottom: 1rem;
+        }
+
+        .playlist-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0a4b5c;
+            margin-bottom: 0.5rem;
+        }
+
+        .playlist-count {
+            color: #4a6f7c;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #4a6879;
+            padding: 2rem 0;
+            border-top: 1px solid #cde2ec;
+        }
+
+        /* ===== رسالة لا يوجد نتائج ===== */
+        .no-results {
+            text-align: center;
+            padding: 4rem;
+            background: white;
+            border-radius: 40px;
+            display: none;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            color: #b0d3dd;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== تحميل المزيد ===== */
+        .load-more {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .load-more-btn {
+            background: white;
+            border: 2px solid #1f6c7f;
+            color: #1f6c7f;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .load-more-btn:hover {
+            background: #1f6c7f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <div class="logo">MATHS</div>
+            <a href="home.html" class="back-btn">
+                <i class="fas fa-arrow-right"></i> العودة للرئيسية
+            </a>
+        </div>
+
+        <!-- عنوان الصفحة مع الإحصائيات -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-video" style="color: #1f6c7f;"></i> 
+                أكاديمية الفيديوهات
+            </h1>
+            <span class="video-count">
+                <i class="fas fa-film"></i> 24 فيديو
+            </span>
+        </div>
+
+        <!-- شريط البحث -->
+        <div class="search-section">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-input" placeholder="ابحث عن فيديو، درس، أو معلم..." id="searchInput">
+            <i class="fas fa-sliders-h" style="cursor: pointer;"></i>
+        </div>
+
+        <!-- التصنيفات -->
+        <div class="categories-wrapper">
+            <div class="categories-list">
+                <span class="category-item active" onclick="filterVideos('all')">الكل</span>
+                <span class="category-item" onclick="filterVideos('algebra')">الجبر</span>
+                <span class="category-item" onclick="filterVideos('geometry')">الهندسة</span>
+                <span class="category-item" onclick="filterVideos('trigonometry')">المثلثات</span>
+                <span class="category-item" onclick="filterVideos('calculus')">التفاضل</span>
+                <span class="category-item" onclick="filterVideos('integration')">التكامل</span>
+                <span class="category-item" onclick="filterVideos('statistics')">الإحصاء</span>
+                <span class="category-item" onclick="filterVideos('patterns')">الأنماط</span>
+            </div>
+            <select class="sort-dropdown">
+                <option>الأحدث أولاً</option>
+                <option>الأقدم أولاً</option>
+                <option>الأكثر مشاهدة</option>
+                <option>الأعلى تقييماً</option>
+            </select>
+        </div>
+
+        <!-- شبكة الفيديوهات -->
+        <div class="videos-grid" id="videosGrid">
+            <!-- فيديو 1: الجبر -->
+            <div class="video-card" data-category="algebra" data-level="beginner">
+                <div class="video-thumbnail">
+                    <span class="video-duration">15:24</span>
+                    <div class="play-button" onclick="playVideo('المقدمة في الجبر')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">
+                        مقدمة في الجبر
+                        <span class="video-level level-beginner">مبتدئ</span>
+                    </div>
+                    <div class="video-meta">
+                        <span class="video-teacher">
+                            <i class="fas fa-chalkboard-teacher"></i> أ. أحمد
+                        </span>
+                        <span class="video-views">
+                            <i class="fas fa-eye"></i> 2.5K
+                        </span>
+                    </div>
+                    <div class="video-tags">
+                        <span class="video-tag">جبر</span>
+                        <span class="video-tag">معادلات</span>
+                        <span class="video-tag">أساسيات</span>
+                    </div>
+                    <button class="watch-btn" onclick="playVideo('مقدمة في الجبر')">
+                        <i class="fas fa-play-circle"></i> مشاهدة الفيديو
+                    </button>
+                </div>
+            </div>
+
+            <!-- فيديو 2: الأنماط -->
+            <div class="video-card" data-category="patterns" data-level="beginner">
+                <div class="video-thumbnail">
+                    <span class="video-duration">12:18</span>
+                    <div class="play-button" onclick="playVideo('لغز الأرقام الشهير')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">
+                        لغز الأرقام الشهير
+                        <span class="video-level level-beginner">مبتدئ</span>
+                    </div>
+                    <div class="video-meta">
+                        <span class="video-teacher">
+                            <i class="fas fa-chalkboard-teacher"></i> أ. سارة
+                        </span>
+                        <span class="video-views">
+                            <i class="fas fa-eye"></i> 8.2K
+                        </span>
+                    </div>
+                    <div class="video-tags">
+                        <span class="video-tag">أنماط</span>
+                        <span class="video-tag">ألغاز</span>
+                        <span class="video-tag">تفكير</span>
+                    </div>
+                    <button class="watch-btn" onclick="playVideo('لغز الأرقام الشهير')">
+                        <i class="fas fa-play-circle"></i> مشاهدة الفيديو
+                    </button>
+                </div>
+            </div>
+
+            <!-- فيديو 3: نظرية ذات الحدين -->
+            <div class="video-card" data-category="algebra" data-level="intermediate">
+                <div class="video-thumbnail">
+                    <span class="video-duration">22:45</span>
+                    <div class="play-button" onclick="playVideo('نظرية ذات الحدين')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">
+                        نظرية ذات الحدين
+                        <span class="video-level level-intermediate">متوسط</span>
+                    </div>
+                    <div class="video-meta">
+                        <span class="video-teacher">
+                            <i class="fas fa-chalkboard-teacher"></i> أ. محمد
+                        </span>
+                        <span class="video-views">
+                            <i class="fas fa-eye"></i> 1.8K
+                        </span>
+                    </div>
+                    <div class="video-tags">
+                        <span class="video-tag">جبر</span>
+                        <span class="video-tag">متطابقات</span>
+                        <span class="video-tag">xⁿ+yⁿ</span>
+                    </div>
+                    <button class="watch-btn" onclick="playVideo('نظرية ذات الحدين')">
+                        <i class="fas fa-play-circle"></i> مشاهدة الفيديو
+                    </button>
+                </div>
+            </div>
+
+            <!-- فيديو 4: الجذر التربيعي -->
+            <div class="video-card" data-category="algebra" data-level="beginner">
+                <div class="video-thumbnail">
+                    <span class="video-duration">18:30</span>
+                    <div class="play-button" onclick="playVideo('الجذر التربيعي المبسط')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">
+                        الجذر التربيعي المبسط
+                        <span class="video-level level-beginner">مبتدئ</span>
+                    </div>
+                    <div class="video-meta">
+                        <span class="video-teacher">
+                            <i class="fas fa-chalkboard-teacher"></i> أ. نور
+                        </span>
+                        <span class="video-views">
+                            <i class="fas fa-eye"></i> 3.1K
+                        </span>
+                    </div>
+                    <div class="video-tags">
+                        <span class="video-tag">جذور</span>
+                        <span class="video-tag">جبر</span>
+                        <span class="video-tag">√A+B</span>
+                    </div>
+                    <button class="watch-btn" onclick="playVideo('الجذر التربيعي المبسط')">
+                        <i class="fas fa-play-circle"></i> مشاهدة الفيديو
+                    </button>
+                </div>
+            </div>
+
+            <!-- فيديو 5: المتطابقات المثلثية -->
+            <div class="video-card" data-category="trigonometry" data-level="advanced">
+                <div class="video-thumbnail">
+                    <span class="video-duration">28:15</span>
+                    <div class="play-button" onclick="playVideo('المتطابقات المثلثية')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">
+                        المتطابقات المثلثية
+                        <span class="video-level level-advanced">متقدم</span>
+                    </div>
+                    <div class="video-meta">
+                        <span class="video-teacher">
+                            <i class="fas fa-chalkboard-teacher"></i> أ. خالد
+                        </span>
+                        <span class="video-views">
+                            <i class="fas fa-eye"></i> 950
+                        </span>
+                    </div>
+                    <div class="video-tags">
+                        <span class="video-tag">مثلثات</span>
+                        <span class="video-tag">جيب</span>
+                        <span class="video-tag">تمام</span>
+                    </div>
+                    <button class="watch-btn" onclick="playVideo('المتطابقات المثلثية')">
+                        <i class="fas fa-play-circle"></i> مشاهدة الفيديو
+                    </button>
+                </div>
+            </div>
+
+            <!-- فيديو 6: التفاضل -->
+            <div class="video-card" data-category="calculus" data-level="advanced">
+                <div class="video-thumbnail">
+                    <span class="video-duration">32:40</span>
+                    <div class="play-button" onclick="playVideo('مقدمة في التفاضل')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">
+                        مقدمة في التفاضل
+                        <span class="video-level level-advanced">متقدم</span>
+                    </div>
+                    <div class="video-meta">
+                        <span class="video-teacher">
+                            <i class="fas fa-chalkboard-teacher"></i> أ. ليلى
+                        </span>
+                        <span class="video-views">
+                            <i class="fas fa-eye"></i> 1.2K
+                        </span>
+                    </div>
+                    <div class="video-tags">
+                        <span class="video-tag">تفاضل</span>
+                        <span class="video-tag">مشتقات</span>
+                        <span class="video-tag">نهايات</span>
+                    </div>
+                    <button class="watch-btn" onclick="playVideo('مقدمة في التفاضل')">
+                        <i class="fas fa-play-circle"></i> مشاهدة الفيديو
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- زر تحميل المزيد -->
+        <div class="load-more">
+            <button class="load-more-btn" onclick="loadMoreVideos()">
+                <i class="fas fa-plus"></i> تحميل المزيد
+            </button>
+        </div>
+
+        <!-- قوائم تشغيل مقترحة -->
+        <div class="featured-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-list"></i> قوائم التشغيل
+                </h2>
+                <a href="#" class="view-all">عرض الكل <i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="playlists-grid">
+                <div class="playlist-card">
+                    <div class="playlist-icon">
+                        <i class="fas fa-square-root-alt"></i>
+                    </div>
+                    <h3 class="playlist-title">أساسيات الجبر</h3>
+                    <span class="playlist-count">8 فيديوهات</span>
+                </div>
+                <div class="playlist-card">
+                    <div class="playlist-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3 class="playlist-title">الألغاز والأنماط</h3>
+                    <span class="playlist-count">6 فيديوهات</span>
+                </div>
+                <div class="playlist-card">
+                    <div class="playlist-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="playlist-title">التفاضل والتكامل</h3>
+                    <span class="playlist-count">10 فيديوهات</span>
+                </div>
+                <div class="playlist-card">
+                    <div class="playlist-icon">
+                        <i class="fas fa-triangle"></i>
+                    </div>
+                    <h3 class="playlist-title">الهندسة والمثلثات</h3>
+                    <span class="playlist-count">7 فيديوهات</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- رسالة لا يوجد نتائج -->
+        <div class="no-results" id="noResults">
+            <i class="fas fa-video-slash"></i>
+            <h3 style="color: #0a4b5c; margin-bottom: 0.5rem;">لا توجد نتائج</h3>
+            <p style="color: #4a6f7c;">جرب البحث بكلمات مختلفة</p>
+        </div>
+
+        <!-- الفوتر -->
+        <div class="footer">
+            <p>© 2026 MATHS Academy - منصة تعلم الرياضيات المتكاملة</p>
+            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 2rem;">
+                <span><i class="fas fa-video"></i> 24 فيديو</span>
+                <span><i class="fas fa-chalkboard-teacher"></i> 6 معلمين</span>
+                <span><i class="fas fa-layer-group"></i> 8 تصنيفات</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== تشغيل الفيديو =====
+        function playVideo(title) {
+            alert(`🎬 جاري تشغيل: ${title}\n\n(هنا هيشتغل الفيديو الفعلي - تقدر توصله برابط YouTube)`);
+        }
+
+        // ===== تصفية الفيديوهات =====
+        function filterVideos(category) {
+            const videos = document.querySelectorAll('.video-card');
+            let visibleCount = 0;
+            
+            // تحديث التصنيف النشط
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // تصفية الفيديوهات
+            videos.forEach(video => {
+                if (category === 'all' || video.dataset.category === category) {
+                    video.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    video.style.display = 'none';
+                }
+            });
+            
+            // إظهار/إخفاء رسالة لا يوجد نتائج
+            const noResults = document.getElementById('noResults');
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+
+        // ===== تحميل المزيد من الفيديوهات =====
+        function loadMoreVideos() {
+            alert('📚 جاري تحميل المزيد من الفيديوهات...');
+        }
+
+        // ===== البحث =====
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const videos = document.querySelectorAll('.video-card');
+            let visibleCount = 0;
+            
+            videos.forEach(video => {
+                const title = video.querySelector('.video-title').innerText.toLowerCase();
+                const teacher = video.querySelector('.video-teacher').innerText.toLowerCase();
+                const tags = video.querySelector('.video-tags').innerText.toLowerCase();
+                
+                if (title.includes(searchTerm) || teacher.includes(searchTerm) || tags.includes(searchTerm)) {
+                    video.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    video.style.display = 'none';
+                }
+            });
+            
+            // إظهار/إخفاء رسالة لا يوجد نتائج
+            const noResults = document.getElementById('noResults');
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        });
+
+        // ===== التحقق من تسجيل الدخول =====
+        window.onload = function() {
+            const user = localStorage.getItem('currentUser');
+            if (!user) {
+                window.location.href = 'index.html';
+            }
+        };
+    </script>
+</body>
+</html>

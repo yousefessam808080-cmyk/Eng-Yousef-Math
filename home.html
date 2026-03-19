@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATHS · الرئيسية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5fafd, #eaf1f7);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ===== الهيدر ===== */
+        .header {
+            background: white;
+            border-radius: 30px;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f2b3d, #1f6c7f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #f0f7fa;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #0a4b5c;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #c14444;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+        }
+
+        .logout-btn:hover {
+            background: #ffe8e8;
+        }
+
+        /* ===== قسم الترحيب ===== */
+        .welcome-section {
+            background: white;
+            border-radius: 30px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 2.2rem;
+            color: #0a4b5c;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== بطاقات الأقسام ===== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid #e0ebf0;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(31, 108, 127, 0.1);
+            border-color: #1f6c7f;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: #1f6c7f;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            color: #0a4b5c;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            color: #4a6f7c;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-btn {
+            background: #1f6c7f;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .card-btn:hover {
+            background: #0a4b5c;
+        }
+
+        /* ===== لغز اليوم ===== */
+        .puzzle-section {
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .puzzle-title {
+            font-size: 1.5rem;
+            color: #0a4b5c;
+            margin-bottom: 1rem;
+        }
+
+        .puzzle-box {
+            background: #f0f7fa;
+            padding: 2rem;
+            border-radius: 20px;
+            font-size: 1.8rem;
+            font-family: 'Source Code Pro', monospace;
+            border-right: 10px solid #1f6c7f;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #4a6879;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <div class="logo">MATHS</div>
+            <div class="user-menu" id="userMenu">
+                <!-- هيتعبى بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- قسم الترحيب -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">مرحباً بك في MATHS! 🎓</h1>
+            <p style="color: #4a6f7c; font-size: 1.2rem;">اختر ما تريد من الأقسام التالية</p>
+        </div>
+
+        <!-- بطاقات الأقسام -->
+        <div class="cards-grid">
+            <!-- بطاقة Homework -->
+            <div class="card" onclick="window.location.href='homework.html'">
+                <div class="card-icon">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+                <h2 class="card-title">Homework</h2>
+                <p class="card-desc">الواجبات والتمارين اليومية</p>
+                <a href="homework.html" class="card-btn">عرض الواجبات</a>
+            </div>
+
+            <!-- بطاقة Skills -->
+            <div class="card" onclick="window.location.href='skills.html'">
+                <div class="card-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h2 class="card-title">Skills</h2>
+                <p class="card-desc">المهارات والفيديوهات التعليمية</p>
+                <a href="skills.html" class="card-btn">استعراض المهارات</a>
+            </div>
+
+            <!-- بطاقة Lessons -->
+            <div class="card" onclick="window.location.href='lessons.html'">
+                <div class="card-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h2 class="card-title">Lessons</h2>
+                <p class="card-desc">الدروس والشروحات</p>
+                <a href="lessons.html" class="card-btn">مشاهدة الدروس</a>
+            </div>
+        </div>
+
+        <!-- لغز الرياضيات -->
+        <div class="puzzle-section">
+            <h2 class="puzzle-title">🧩 لغز اليوم</h2>
+            <div class="puzzle-box">
+                1 + 4 = 5<br>
+                2 + 5 = 12<br>
+                3 + 6 = 21<br>
+                <span style="font-size: 2.2rem; font-weight: 800; color: #0a4b5c;">8 + 11 = ?</span>
+            </div>
+        </div>
+
+        <!-- الفوتر -->
+        <div class="footer">
+            <p>© 2026 MATHS Academy - منصة تعلم الرياضيات</p>
+        </div>
+    </div>
+
+    <script>
+        // التحقق من تسجيل الدخول
+        window.onload = function() {
+            const user = localStorage.getItem('currentUser');
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // عرض اسم المستخدم
+            const userData = JSON.parse(user);
+            const userMenu = document.getElementById('userMenu');
+            userMenu.innerHTML = `
+                <i class="fas fa-user-circle" style="font-size: 1.5rem; color: #1f6c7f;"></i>
+                <span class="user-name">${userData.name || userData.email.split('@')[0]}</span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            `;
+        };
+
+        // تسجيل الخروج
+        window.logout = function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>
