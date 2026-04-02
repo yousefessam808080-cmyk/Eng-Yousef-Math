@@ -69,6 +69,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 15px;
         }
         .user-info h3 {
             color: #0a4b5c;
@@ -108,6 +109,15 @@
             padding: 8px 20px;
             border-radius: 30px;
             cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn-reset {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
         }
         .logout-btn {
             background: #e74c3c;
@@ -116,6 +126,7 @@
             border-radius: 30px;
             text-decoration: none;
             font-size: 0.9rem;
+            cursor: pointer;
         }
         .header-admin {
             display: flex;
@@ -124,6 +135,18 @@
             margin-bottom: 30px;
         }
         .hidden { display: none; }
+        .reset-password-form {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f7fa;
+            border-radius: 30px;
+        }
+        .reset-password-form input {
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid #cde2ec;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -213,9 +236,33 @@
                             <h3>${user.name}</h3>
                             <p><i class="fas fa-envelope"></i> ${user.email}</p>
                         </div>
-                        <span class="badge approved">مفعل</span>
+                        <div>
+                            <span class="badge approved">مفعل</span>
+                            <button class="btn-reset" onclick="showResetForm(${user.id}, '${user.email}')">
+                                <i class="fas fa-key"></i> تغيير كلمة السر
+                            </button>
+                        </div>
                     </div>
                 `).join('');
+            }
+        }
+
+        function showResetForm(userId, userEmail) {
+            const newPassword = prompt(`🔑 تغيير كلمة السر للمستخدم: ${userEmail}\nأدخل كلمة السر الجديدة (6 أحرف على الأقل):`);
+            
+            if (newPassword && newPassword.length >= 6) {
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                users = users.map(user => {
+                    if (user.id === userId) {
+                        user.password = newPassword;
+                    }
+                    return user;
+                });
+                localStorage.setItem('users', JSON.stringify(users));
+                alert(`✅ تم تغيير كلمة السر للمستخدم ${userEmail} بنجاح`);
+                loadUsers();
+            } else if (newPassword) {
+                alert('❌ كلمة السر يجب أن تكون 6 أحرف على الأقل');
             }
         }
 
