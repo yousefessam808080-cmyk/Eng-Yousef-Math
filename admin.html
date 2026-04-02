@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATHS · لوحة التحكم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            background: linear-gradient(145deg, #0f2b3d, #1a4a5f);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .admin-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 48px;
+            padding: 40px;
+        }
+        h1 {
+            color: #0a4b5c;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .login-area {
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #f4fafd;
+            border-radius: 40px;
+            padding: 5px 25px;
+            margin-bottom: 20px;
+            border: 2px solid transparent;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 18px 0;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            outline: none;
+        }
+        .btn {
+            background: #1f6c7f;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .user-card {
+            background: #f8fcff;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e0ebf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .user-info h3 {
+            color: #0a4b5c;
+            margin-bottom: 5px;
+        }
+        .user-info p {
+            color: #4a6f7c;
+            font-size: 0.9rem;
+        }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge.pending {
+            background: #fff7e0;
+            color: #a1662b;
+        }
+        .badge.approved {
+            background: #e1ffe8;
+            color: #1d6b47;
+        }
+        .btn-approve {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn-reject {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .header-admin {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="admin-container" id="adminContainer">
+        <div id="loginSection">
+            <div class="login-area">
+                <h1 style="justify-content: center;">🔐 دخول المشرف</h1>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="adminPassword" placeholder="كلمة السر">
+                </div>
+                <button class="btn" onclick="checkAdminLogin()">
+                    <i class="fas fa-sign-in-alt"></i> دخول
+                </button>
+                <div id="adminMessage" style="margin-top: 20px; color: red;"></div>
+            </div>
+        </div>
+
+        <div id="dashboardSection" class="hidden">
+            <div class="header-admin">
+                <h1><i class="fas fa-user-shield"></i> لوحة التحكم</h1>
+                <button class="logout-btn" onclick="logoutAdmin()">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+            <h2>📋 طلبات التسجيل الجديدة</h2>
+            <div id="pendingUsersList"></div>
+            <h2 style="margin-top: 30px;">✅ المستخدمين النشطين</h2>
+            <div id="approvedUsersList"></div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "mido2500";
+
+        function checkAdminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            const msg = document.getElementById('adminMessage');
+
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('dashboardSection').classList.remove('hidden');
+                loadUsers();
+            } else {
+                msg.innerText = '❌ كلمة السر غير صحيحة';
+                setTimeout(() => { msg.innerText = ''; }, 3000);
+            }
+        }
+
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const pendingUsers = users.filter(u => u.status === 'pending');
+            const approvedUsers = users.filter(u => u.status === 'approved');
+
+            const pendingDiv = document.getElementById('pendingUsersList');
+            const approvedDiv = document.getElementById('approvedUsersList');
+
+            if (pendingUsers.length === 0) {
+                pendingDiv.innerHTML = '<p style="color: #4a6f7c;">✨ لا توجد طلبات جديدة</p>';
+            } else {
+                pendingDiv.innerHTML = pendingUsers.map(user => `
+                    <div class="user-card">
+                        <div class="user-info">
+                            <h3>${user.name}</h3>
+                            <p><i class="fas fa-envelope"></i> ${user.email}</p>
+                            <p><i class="fas fa-calendar"></i> ${user.createdAt}</p>
+                        </div>
+                        <div>
+                            <span class="badge pending">قيد المراجعة</span>
+                            <button class="btn-approve" onclick="approveUser(${user.id})">
+                                <i class="fas fa-check"></i> موافقة
+                            </button>
+                            <button class="btn-reject" onclick="rejectUser(${user.id})">
+                                <i class="fas fa-times"></i> رفض
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (approvedUsers.length === 0) {
+                approvedDiv.innerHTML = '<p style="color: #4a6f7c;">لا يوجد مستخدمين نشطين حتى الآن</p>';
+            } else {
+                approvedDiv.innerHTML = approvedUsers.map(user => `
+                    <div class="user-card">
+                        <div class="user-info">
+                            <h3>${user.name}</h3>
+                            <p><i class="fas fa-envelope"></i> ${user.email}</p>
+                        </div>
+                        <span class="badge approved">مفعل</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function approveUser(id) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            users = users.map(user => {
+                if (user.id === id) {
+                    user.status = 'approved';
+                }
+                return user;
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+            loadUsers();
+        }
+
+        function rejectUser(id) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            users = users.filter(user => user.id !== id);
+            localStorage.setItem('users', JSON.stringify(users));
+            loadUsers();
+        }
+
+        function logoutAdmin() {
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+        }
+    </script>
+</body>
+</html>
