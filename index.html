@@ -2,26 +2,19 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Academy | 3D Learning</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: radial-gradient(circle at 10% 30%, #0b1c26, #07161f);
             min-height: 100vh;
-            overflow-x: hidden;
             color: #fff;
+            overflow-x: hidden;
         }
-
-        /* خلفية 3D متحركة (جسيمات) */
         #canvas-bg {
             position: fixed;
             top: 0;
@@ -30,9 +23,8 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.5;
         }
-
         .glass-overlay {
             position: fixed;
             top: 0;
@@ -43,7 +35,6 @@
             backdrop-filter: blur(3px);
             z-index: 1;
         }
-
         .content {
             position: relative;
             z-index: 2;
@@ -51,43 +42,23 @@
             margin: 0 auto;
             padding: 30px 40px;
         }
-
-        /* هيدر */
         .header-3d {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(255,255,255,0.07);
             backdrop-filter: blur(15px);
             border-radius: 80px;
             padding: 12px 28px;
-            border: 1px solid rgba(255,255,255,0.15);
             margin-bottom: 60px;
-            flex-wrap: wrap;
         }
-
         .logo h1 {
             font-size: 2rem;
-            font-weight: 800;
             background: linear-gradient(135deg, #FFF6D9, #C0E0FF);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 12px rgba(0,255,255,0.2);
         }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-        }
-
-        .nav-links a {
-            color: #eef5ff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
         .lang-group button {
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
@@ -98,39 +69,13 @@
             font-weight: 600;
             cursor: pointer;
         }
-
-        .lang-group .active {
-            background: #1f6c7f;
-            border-color: #1f6c7f;
-            box-shadow: 0 0 10px #1f6c7f;
-        }
-
-        /* كارد الهيرو 3D */
         .hero-3d {
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(20px);
             border-radius: 64px;
             padding: 50px 40px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 30px 45px rgba(0,0,0,0.3);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
         }
-
-        .hero-3d:hover {
-            transform: translateY(-8px);
-        }
-
-        .hero-3d h2 {
-            font-size: 2.5rem;
-            background: linear-gradient(145deg, #fff, #aae0ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
-        }
-
         .math-3d {
             font-size: 2rem;
             font-family: monospace;
@@ -139,104 +84,52 @@
             padding: 35px;
             margin: 35px 0;
             border-left: 8px solid cyan;
-            direction: ltr;
-            letter-spacing: 2px;
         }
-
         .btn-group {
             display: flex;
             justify-content: center;
             gap: 25px;
             margin-top: 30px;
         }
-
         .btn {
             padding: 14px 38px;
             border-radius: 60px;
             font-weight: 700;
-            border: none;
             cursor: pointer;
-            transition: 0.2s;
             font-size: 1rem;
         }
-
         .btn-primary {
             background: #1f6c7f;
             color: white;
-            box-shadow: 0 8px 20px rgba(31,108,127,0.4);
         }
-
         .btn-outline {
             background: transparent;
             border: 2px solid #1f6c7f;
             color: #c3edff;
         }
-
-        .btn-primary:hover, .btn-outline:hover {
-            transform: scale(1.03);
-            background: #1f6c7f;
-            color: white;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 70px;
-            color: #8eacc0;
-        }
-
-        @media (max-width: 800px) {
-            .content { padding: 20px; }
-            .hero-3d h2 { font-size: 1.7rem; }
-            .math-3d { font-size: 1.2rem; }
-        }
-
-        /* مودال (بنفس تصميم خان أكاديمي) */
+        /* مودال بدون سوشيال */
         .modal-ka {
             display: none;
             position: fixed;
             top:0; left:0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             z-index: 3000;
             justify-content: center;
             align-items: center;
         }
         .modal-card {
             background: #0f1e27;
-            max-width: 500px;
+            max-width: 450px;
             width: 90%;
             border-radius: 48px;
             padding: 35px;
             border: 1px solid #2f5e70;
-            box-shadow: 0 0 40px rgba(0,255,255,0.1);
         }
         .modal-card h3 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 20px;
             color: white;
-        }
-        .social-row {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 20px 0;
-        }
-        .social-btn {
-            background: #1c2f3a;
-            border: 1px solid #2f5e70;
-            padding: 12px;
-            border-radius: 60px;
-            font-weight: 600;
-            cursor: pointer;
-            color: white;
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-        .divider-or {
-            text-align: center;
-            margin: 20px 0;
-            color: #afcddd;
         }
         .input-field {
             width: 100%;
@@ -247,60 +140,56 @@
             background: #1e2f38;
             color: white;
         }
-        .helper-note {
-            font-size: 0.7rem;
-            color: #f1c38f;
+        .btn-block {
+            width: 100%;
+            background: #1f6c7f;
+            padding: 14px;
+            border-radius: 60px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
         }
         .close-modal-x {
             position: absolute;
             left: 20px;
             top: 20px;
-            font-size: 30px;
+            font-size: 28px;
             cursor: pointer;
             color: white;
         }
         .switch-action {
-            margin-top: 25px;
+            margin-top: 20px;
             color: #7fcdff;
             cursor: pointer;
+            text-align: center;
         }
+        footer { text-align: center; margin-top: 60px; color: #8eacc0; }
+        @media (max-width:800px){ .content{ padding: 20px; } .math-3d{ font-size: 1.3rem; } }
     </style>
-    <!-- Three.js لخلفية 3D -->
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-            }
-        }
+        { "imports": { "three": "https://unpkg.com/three@0.128.0/build/three.module.js" } }
     </script>
 </head>
 <body>
-
 <canvas id="canvas-bg"></canvas>
 <div class="glass-overlay"></div>
-
 <div class="content">
     <div class="header-3d">
         <div class="logo"><h1>📐 Math Academy</h1></div>
-        <div class="nav-links">
-            <a href="#" data-en="About" data-ar="من نحن">About</a>
-            <a href="#" data-en="Gallery" data-ar="المعرض">Gallery</a>
-            <a href="#" data-en="Student Reviews" data-ar="آراء الطلاب">Reviews</a>
-            <a href="#" data-en="Contact us" data-ar="اتصل بنا">Contact</a>
-        </div>
         <div class="lang-group">
             <button class="active" onclick="setLanguage('en')">EN</button>
             <button onclick="setLanguage('ar')">عربي</button>
         </div>
     </div>
-
     <div class="hero-3d">
         <h2 id="heroPhrase" data-en="Discover the Magic of Learning with:" data-ar="اكتشف سحر التعلم مع:">Discover the Magic of Learning with:</h2>
         <div class="math-3d">
             √(1+cos2n) &nbsp; (n² - 2n + 3)<br>
             n ≥ n₀ : {xₙ}
         </div>
-        <div id="tagline" data-en="MATHEMATICS FOR EVERYONE" data-ar="الرياضيات للجميع" style="font-weight:600;">MATHEMATICS FOR EVERYONE</div>
+        <div id="tagline" data-en="MATHEMATICS FOR EVERYONE" data-ar="الرياضيات للجميع">MATHEMATICS FOR EVERYONE</div>
         <div id="academyName" data-en="MATH ACADEMY" data-ar="أكاديمية الرياضيات" style="font-weight:800; font-size:2rem; margin:15px 0;">MATH ACADEMY</div>
         <div class="btn-group">
             <button class="btn btn-primary" onclick="openModal('login')" id="btnSignin" data-en="SIGN IN" data-ar="تسجيل دخول">SIGN IN</button>
@@ -310,30 +199,21 @@
     <footer>© 2026 Math Academy – 3D immersive learning</footer>
 </div>
 
-<!-- Modal -->
-<div id="modalRoot" class="modal-ka">
+<!-- Modal بدون سوشيال -->
+<div id="modalRoot" class="modal-ka" style="display:none;">
     <div class="modal-card">
         <span class="close-modal-x" onclick="closeModal()">&times;</span>
         <h3 id="modalHeader">SIGN IN</h3>
-        <div class="social-row">
-            <button class="social-btn"><i class="fab fa-google"></i> Continue with Google</button>
-            <button class="social-btn"><i class="fab fa-apple"></i> Continue with Apple</button>
-            <button class="social-btn"><i class="fab fa-microsoft"></i> Continue with Microsoft</button>
-            <button class="social-btn"><i class="fab fa-facebook"></i> Continue with Facebook</button>
-        </div>
-        <div class="divider-or">OR</div>
         <div id="loginPanel">
             <input class="input-field" type="text" id="loginEmailUser" placeholder="Email or username">
             <input class="input-field" type="password" id="loginPassw" placeholder="Password">
-            <div class="helper-note">Password must be at least 8 characters, letters & numbers</div>
-            <button class="btn btn-primary" style="width:100%; background:#1f6c7f;" onclick="processLogin()">Log in now!</button>
+            <button class="btn-block" onclick="processLogin()">Log in now!</button>
         </div>
         <div id="signupPanel" style="display:none;">
             <input class="input-field" type="text" id="fullName" placeholder="Full name">
             <input class="input-field" type="text" id="userName" placeholder="Username">
-            <input class="input-field" type="password" id="signupPass" placeholder="Password">
-            <div class="helper-note">Password must be at least 8 characters, letters & numbers</div>
-            <button class="btn btn-primary" style="width:100%; background:#1f6c7f;" onclick="processRegister()">Create account</button>
+            <input class="input-field" type="password" id="signupPass" placeholder="Password (min 8 chars)">
+            <button class="btn-block" onclick="processRegister()">Create account</button>
         </div>
         <div class="switch-action" onclick="toggleModalMode()" id="toggleTxt">Don't have an account? Sign up</div>
         <div id="modalMsg" style="color:#ffaa88; margin-top:15px;"></div>
@@ -342,58 +222,23 @@
 
 <script type="module">
     import * as THREE from 'three';
-
     const canvas = document.getElementById('canvas-bg');
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 20;
-
-    // مجموعة من الكرات الرياضية
-    const particlesGeometry = new THREE.BufferGeometry();
-    const count = 800;
+    const geom = new THREE.BufferGeometry();
+    const count = 1000;
     const positions = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-        positions[i*3] = (Math.random() - 0.5) * 60;
-        positions[i*3+1] = (Math.random() - 0.5) * 40;
-        positions[i*3+2] = (Math.random() - 0.5) * 40 - 20;
-    }
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const particleMaterial = new THREE.PointsMaterial({ color: 0x44aaff, size: 0.12, transparent: true, opacity: 0.6 });
-    const particles = new THREE.Points(particlesGeometry, particleMaterial);
+    for (let i = 0; i < count; i++) { positions[i*3] = (Math.random() - 0.5) * 70; positions[i*3+1] = (Math.random() - 0.5) * 50; positions[i*3+2] = (Math.random() - 0.5) * 60 - 20; }
+    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particles = new THREE.Points(geom, new THREE.PointsMaterial({ color: 0x88ccff, size: 0.1, transparent: true, opacity: 0.5 }));
     scene.add(particles);
-
-    // مجموعة إضافية (تأثير نجوم)
-    const starGeometry = new THREE.BufferGeometry();
-    const starCount = 1200;
-    const starPos = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-        starPos[i*3] = (Math.random() - 0.5) * 200;
-        starPos[i*3+1] = (Math.random() - 0.5) * 100;
-        starPos[i*3+2] = (Math.random() - 0.5) * 80 - 40;
-    }
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-    const starMaterial = new THREE.PointsMaterial({ color: 0xffaa66, size: 0.07 });
-    const stars = new THREE.Points(starGeometry, starMaterial);
-    scene.add(stars);
-
-    function animate() {
-        requestAnimationFrame(animate);
-        particles.rotation.y += 0.002;
-        particles.rotation.x += 0.001;
-        stars.rotation.y -= 0.0005;
-        renderer.render(scene, camera);
-    }
+    function animate() { requestAnimationFrame(animate); particles.rotation.y += 0.002; renderer.render(scene, camera); }
     animate();
-
-    window.addEventListener('resize', () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-    });
+    window.addEventListener('resize', () => { renderer.setSize(window.innerWidth, window.innerHeight); camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); });
 </script>
 
 <script>
@@ -405,13 +250,11 @@
         currentLang = lang;
         document.documentElement.lang = lang;
         document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
-        document.querySelectorAll('[data-en][data-ar]').forEach(el => {
-            el.innerText = lang === 'ar' ? el.dataset.ar : el.dataset.en;
-        });
+        document.querySelectorAll('[data-en][data-ar]').forEach(el => el.innerText = lang === 'ar' ? el.dataset.ar : el.dataset.en);
         document.getElementById('btnSignin').innerText = lang === 'ar' ? 'تسجيل دخول' : 'SIGN IN';
         document.getElementById('btnSignup').innerText = lang === 'ar' ? 'حساب جديد' : 'REGISTER';
-        document.getElementById('modalHeader').innerText = (currentModalMode === 'login') ? (lang === 'ar' ? 'تسجيل دخول' : 'SIGN IN') : (lang === 'ar' ? 'إنشاء حساب' : 'REGISTER');
-        document.getElementById('toggleTxt').innerText = (currentModalMode === 'login') ? (lang === 'ar' ? 'ليس لديك حساب؟ سجل الآن' : "Don't have an account? Sign up") : (lang === 'ar' ? 'لديك حساب؟ تسجيل دخول' : 'Already have an account? Sign in');
+        document.getElementById('modalHeader').innerText = currentModalMode === 'login' ? (lang === 'ar' ? 'تسجيل دخول' : 'SIGN IN') : (lang === 'ar' ? 'إنشاء حساب' : 'REGISTER');
+        document.getElementById('toggleTxt').innerText = currentModalMode === 'login' ? (lang === 'ar' ? 'ليس لديك حساب؟ سجل الآن' : "Don't have an account? Sign up") : (lang === 'ar' ? 'لديك حساب؟ تسجيل دخول' : 'Already have an account? Sign in');
         document.querySelectorAll('.lang-group button').forEach(btn => btn.classList.remove('active'));
         if(lang === 'en') document.querySelector('.lang-group button:first-child').classList.add('active');
         else document.querySelector('.lang-group button:last-child').classList.add('active');
@@ -422,64 +265,36 @@
         const loginDiv = document.getElementById('loginPanel');
         const signupDiv = document.getElementById('signupPanel');
         const modalHeader = document.getElementById('modalHeader');
-        if(mode === 'login') {
-            loginDiv.style.display = 'block';
-            signupDiv.style.display = 'none';
-            modalHeader.innerText = currentLang === 'ar' ? 'تسجيل دخول' : 'SIGN IN';
-        } else {
-            loginDiv.style.display = 'none';
-            signupDiv.style.display = 'block';
-            modalHeader.innerText = currentLang === 'ar' ? 'إنشاء حساب' : 'REGISTER';
-        }
+        if(mode === 'login') { loginDiv.style.display = 'block'; signupDiv.style.display = 'none'; modalHeader.innerText = currentLang === 'ar' ? 'تسجيل دخول' : 'SIGN IN'; }
+        else { loginDiv.style.display = 'none'; signupDiv.style.display = 'block'; modalHeader.innerText = currentLang === 'ar' ? 'إنشاء حساب' : 'REGISTER'; }
         document.getElementById('toggleTxt').innerText = mode === 'login' ? (currentLang === 'ar' ? 'ليس لديك حساب؟ سجل الآن' : "Don't have an account? Sign up") : (currentLang === 'ar' ? 'لديك حساب؟ تسجيل دخول' : 'Already have an account? Sign in');
         document.getElementById('modalRoot').style.display = 'flex';
         document.getElementById('modalMsg').innerText = '';
     }
-
     function closeModal() { document.getElementById('modalRoot').style.display = 'none'; }
-
-    function toggleModalMode() {
-        if(currentModalMode === 'login') openModal('register');
-        else openModal('login');
-    }
-
+    function toggleModalMode() { if(currentModalMode === 'login') openModal('register'); else openModal('login'); }
     function processLogin() {
-        const email = document.getElementById('loginEmailUser').value.trim();
-        const pass = document.getElementById('loginPassw').value.trim();
-        const user = users.find(u => (u.email === email || u.username === email) && u.password === pass);
-        if(!user) { document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'بيانات غير صحيحة' : 'Invalid credentials'; return; }
-        if(user.status !== 'approved') { document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'حسابك قيد المراجعة' : 'Account pending approval'; return; }
+        let email = document.getElementById('loginEmailUser').value.trim();
+        let pass = document.getElementById('loginPassw').value.trim();
+        let user = users.find(u => (u.email === email || u.username === email) && u.password === pass);
+        if(!user){ document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'بيانات غير صحيحة' : 'Invalid credentials'; return; }
+        if(user.status !== 'approved'){ document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'حسابك قيد المراجعة' : 'Account pending approval'; return; }
         localStorage.setItem('currentUser', JSON.stringify(user));
         window.location.href = 'home.html';
     }
-
     function processRegister() {
-        const name = document.getElementById('fullName').value.trim();
-        const username = document.getElementById('userName').value.trim();
-        const pass = document.getElementById('signupPass').value.trim();
-        if(!name || !username || pass.length < 8) {
-            document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'املأ الحقول وكلمة السر 8 أحرف' : 'Fill fields & password 8+ chars';
-            return;
-        }
-        if(users.find(u => u.username === username || u.email === username)) {
-            document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'اسم المستخدم موجود' : 'Username exists';
-            return;
-        }
-        const newUser = {
-            id: Date.now(),
-            name, username,
-            email: username,
-            password: pass,
-            status: 'pending',
-            createdAt: new Date().toLocaleString()
-        };
+        let name = document.getElementById('fullName').value.trim();
+        let username = document.getElementById('userName').value.trim();
+        let pass = document.getElementById('signupPass').value.trim();
+        if(!name || !username || pass.length < 8){ document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'املأ الحقول وكلمة السر 8 أحرف' : 'Fill fields & password 8+ chars'; return; }
+        if(users.find(u => u.username === username || u.email === username)){ document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'اسم المستخدم موجود' : 'Username exists'; return; }
+        let newUser = { id: Date.now(), name, username, email: username, password: pass, status: 'pending', createdAt: new Date().toLocaleString() };
         users.push(newUser);
         localStorage.setItem('users', JSON.stringify(users));
         document.getElementById('modalMsg').style.color = '#8affb0';
-        document.getElementById('modalMsg').innerText = currentLang === 'ar' ? '✅ تم الطلب ، انتظر موافقة المشرف' : '✅ Request sent, wait for admin';
+        document.getElementById('modalMsg').innerText = currentLang === 'ar' ? '✅ تم الطلب، انتظر موافقة المشرف' : '✅ Request sent, wait for admin';
         setTimeout(() => closeModal(), 2000);
     }
-
     window.onclick = (e) => { if(e.target === document.getElementById('modalRoot')) closeModal(); };
     setLanguage('en');
 </script>
