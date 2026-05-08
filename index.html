@@ -1,483 +1,487 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATHS · تسجيل دخول</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Math Academy | 3D Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
         }
+
         body {
-            background: linear-gradient(145deg, #0f2b3d, #1a4a5f);
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 10% 30%, #0b1c26, #07161f);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            overflow-x: hidden;
+            color: #fff;
         }
-        .login-wrapper {
-            max-width: 500px;
+
+        /* خلفية 3D متحركة (جسيمات) */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: white;
-            border-radius: 48px;
-            padding: 45px 40px;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
         }
-        .math-logo {
-            font-size: 3.5rem;
+
+        .glass-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 22, 31, 0.65);
+            backdrop-filter: blur(3px);
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        /* هيدر */
+        .header-3d {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(15px);
+            border-radius: 80px;
+            padding: 12px 28px;
+            border: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
             font-weight: 800;
-            letter-spacing: 8px;
-            background: linear-gradient(135deg, #0f2b3d, #1f6c7f);
+            background: linear-gradient(135deg, #FFF6D9, #C0E0FF);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            text-align: center;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 12px rgba(0,255,255,0.2);
         }
-        .step-indicator {
+
+        .nav-links {
             display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 32px;
         }
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #e2eef5;
-            color: #3a6b7a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        .step.active .step-number {
-            background: #1f6c7f;
-            color: white;
-        }
-        .step-text {
-            font-size: 0.9rem;
-            color: #4a6f7c;
+
+        .nav-links a {
+            color: #eef5ff;
+            text-decoration: none;
             font-weight: 600;
+            transition: 0.2s;
         }
-        .step.active .step-text {
-            color: #1f6c7f;
-        }
-        .form-step {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .form-step.active {
-            display: flex;
-        }
-        .input-group {
-            display: flex;
-            align-items: center;
-            background: #f4fafd;
+
+        .lang-group button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 18px;
             border-radius: 40px;
-            padding: 5px 25px;
-            border: 2px solid transparent;
+            margin: 0 4px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
         }
-        .input-group:focus-within {
+
+        .lang-group .active {
+            background: #1f6c7f;
             border-color: #1f6c7f;
-            background: white;
+            box-shadow: 0 0 10px #1f6c7f;
         }
-        .input-group i {
-            color: #3f7e93;
-            font-size: 1.2rem;
-            margin-right: 15px;
+
+        /* كارد الهيرو 3D */
+        .hero-3d {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 64px;
+            padding: 50px 40px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 30px 45px rgba(0,0,0,0.3);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
         }
-        .input-group input {
-            width: 100%;
-            padding: 18px 0;
-            border: none;
-            background: transparent;
-            font-size: 1.1rem;
-            outline: none;
+
+        .hero-3d:hover {
+            transform: translateY(-8px);
         }
+
+        .hero-3d h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(145deg, #fff, #aae0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .math-3d {
+            font-size: 2rem;
+            font-family: monospace;
+            background: rgba(0,0,0,0.5);
+            border-radius: 60px;
+            padding: 35px;
+            margin: 35px 0;
+            border-left: 8px solid cyan;
+            direction: ltr;
+            letter-spacing: 2px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
         .btn {
+            padding: 14px 38px;
+            border-radius: 60px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
             background: #1f6c7f;
             color: white;
-            border: none;
-            padding: 18px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 40px;
+            box-shadow: 0 8px 20px rgba(31,108,127,0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #1f6c7f;
+            color: #c3edff;
+        }
+
+        .btn-primary:hover, .btn-outline:hover {
+            transform: scale(1.03);
+            background: #1f6c7f;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 70px;
+            color: #8eacc0;
+        }
+
+        @media (max-width: 800px) {
+            .content { padding: 20px; }
+            .hero-3d h2 { font-size: 1.7rem; }
+            .math-3d { font-size: 1.2rem; }
+        }
+
+        /* مودال (بنفس تصميم خان أكاديمي) */
+        .modal-ka {
+            display: none;
+            position: fixed;
+            top:0; left:0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-card {
+            background: #0f1e27;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 48px;
+            padding: 35px;
+            border: 1px solid #2f5e70;
+            box-shadow: 0 0 40px rgba(0,255,255,0.1);
+        }
+        .modal-card h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .social-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .social-btn {
+            background: #1c2f3a;
+            border: 1px solid #2f5e70;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            color: white;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .divider-or {
+            text-align: center;
+            margin: 20px 0;
+            color: #afcddd;
+        }
+        .input-field {
             width: 100%;
+            padding: 14px 18px;
+            margin: 12px 0;
+            border-radius: 60px;
+            border: none;
+            background: #1e2f38;
+            color: white;
         }
-        .btn:hover {
-            background: #0a4b5c;
+        .helper-note {
+            font-size: 0.7rem;
+            color: #f1c38f;
         }
-        .message {
-            padding: 15px;
-            border-radius: 30px;
-            font-weight: 600;
-            display: none;
-            margin-top: 10px;
-            text-align: center;
-        }
-        .success-msg {
-            background: #e1ffe8;
-            color: #1d6b47;
-            border: 1px solid #a3e0b6;
-        }
-        .error-msg {
-            background: #ffe8e8;
-            color: #c14444;
-            border: 1px solid #ffb3b3;
-        }
-        .info-text {
-            color: #4a6f7c;
-            font-size: 0.95rem;
-            margin-top: 20px;
-            text-align: center;
-        }
-        .resend-link {
-            color: #1f6c7f;
-            font-weight: 600;
+        .close-modal-x {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font-size: 30px;
             cursor: pointer;
+            color: white;
         }
-        .forgot-link {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .forgot-link span {
-            color: #1f6c7f;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .toggle-auth {
-            text-align: center;
+        .switch-action {
             margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #e2eef5;
-        }
-        .toggle-auth span {
-            color: #1f6c7f;
-            font-weight: 700;
+            color: #7fcdff;
             cursor: pointer;
-        }
-        .hidden {
-            display: none;
         }
     </style>
+    <!-- Three.js لخلفية 3D -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+            }
+        }
+    </script>
 </head>
 <body>
-    <div class="login-wrapper">
-        <div class="math-logo">MATHS</div>
 
-        <!-- خطوات التسجيل -->
-        <div class="step-indicator">
-            <div class="step active" id="step1">
-                <div class="step-number">1</div>
-                <div class="step-text">الحساب</div>
-            </div>
-            <div class="step" id="step2">
-                <div class="step-number">2</div>
-                <div class="step-text">التأكيد</div>
-            </div>
-            <div class="step" id="step3">
-                <div class="step-number">3</div>
-                <div class="step-text">دخول</div>
-            </div>
+<canvas id="canvas-bg"></canvas>
+<div class="glass-overlay"></div>
+
+<div class="content">
+    <div class="header-3d">
+        <div class="logo"><h1>📐 Math Academy</h1></div>
+        <div class="nav-links">
+            <a href="#" data-en="About" data-ar="من نحن">About</a>
+            <a href="#" data-en="Gallery" data-ar="المعرض">Gallery</a>
+            <a href="#" data-en="Student Reviews" data-ar="آراء الطلاب">Reviews</a>
+            <a href="#" data-en="Contact us" data-ar="اتصل بنا">Contact</a>
         </div>
-
-        <!-- STEP 1: الحساب -->
-        <div id="step1Form" class="form-step active">
-            <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-                <button id="loginTabBtn" onclick="showLoginForm()" style="background: none; border: none; font-size: 1.2rem; font-weight: 700; color: #1f6c7f; border-bottom: 3px solid #1f6c7f; padding-bottom: 5px; cursor: pointer;">
-                    <i class="fas fa-sign-in-alt"></i> تسجيل دخول
-                </button>
-                <button id="signupTabBtn" onclick="showSignupForm()" style="background: none; border: none; font-size: 1.2rem; font-weight: 600; color: #4a6f7c; padding-bottom: 5px; cursor: pointer;">
-                    <i class="fas fa-user-plus"></i> حساب جديد
-                </button>
-            </div>
-
-            <!-- تسجيل دخول -->
-            <div id="loginFields">
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="loginPassword" placeholder="كلمة السر">
-                </div>
-                <button class="btn" onclick="handleLogin()">
-                    <i class="fas fa-sign-in-alt"></i> تسجيل دخول
-                </button>
-                <div class="forgot-link">
-                    <span onclick="alert('تواصل مع المشرف لاستعادة كلمة السر')">نسيت كلمة السر؟</span>
-                </div>
-            </div>
-
-            <!-- إنشاء حساب جديد -->
-            <div id="signupFields" class="hidden">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="signupName" placeholder="الاسم الكامل">
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="signupEmail" placeholder="البريد الإلكتروني">
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="signupPassword" placeholder="كلمة السر (6 أحرف)">
-                </div>
-                <button class="btn" onclick="handleSignup()">
-                    <i class="fas fa-user-plus"></i> إنشاء حساب
-                </button>
-            </div>
-
-            <div id="step1Message" class="message"></div>
-        </div>
-
-        <!-- STEP 2: كود التأكيد -->
-        <div id="step2Form" class="form-step">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <i class="fas fa-envelope-open-text" style="font-size: 3rem; color: #1f6c7f;"></i>
-                <h3 style="color: #0a4b5c; margin: 15px 0;">تأكيد البريد الإلكتروني</h3>
-                <p style="color: #4a6f7c;" id="emailDisplay"></p>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-key"></i>
-                <input type="text" id="codeInput" placeholder="كود التأكيد (6 أرقام)" maxlength="6">
-            </div>
-            <button class="btn" onclick="verifyCode()">
-                <i class="fas fa-check-circle"></i> تأكيد
-            </button>
-            <div id="step2Message" class="message"></div>
-            <div class="info-text">
-                لم يصلك الكود؟ <span class="resend-link" onclick="resendCode()">إعادة إرسال</span>
-            </div>
-        </div>
-
-        <!-- STEP 3: نجاح -->
-        <div id="step3Form" class="form-step">
-            <div style="text-align: center; padding: 30px 0;">
-                <i class="fas fa-check-circle" style="font-size: 5rem; color: #1f6c7f;"></i>
-                <h2 style="color: #0a4b5c; margin: 20px 0 10px;" id="successTitle">تم بنجاح!</h2>
-                <p style="color: #4a6f7c; font-size: 1.1rem;" id="successMessage">جاري تحويلك...</p>
-                <i class="fas fa-spinner fa-pulse" style="font-size: 2rem; color: #1f6c7f; margin-top: 20px;"></i>
-            </div>
+        <div class="lang-group">
+            <button class="active" onclick="setLanguage('en')">EN</button>
+            <button onclick="setLanguage('ar')">عربي</button>
         </div>
     </div>
 
-    <script>
-        // ✅ مفاتيح EmailJS
-        emailjs.init("8s2EbSp8ouAhUquMS");
-        const SERVICE_ID = "service_t4vqjm8";
-        const TEMPLATE_ID = "template_nbze6tt";
+    <div class="hero-3d">
+        <h2 id="heroPhrase" data-en="Discover the Magic of Learning with:" data-ar="اكتشف سحر التعلم مع:">Discover the Magic of Learning with:</h2>
+        <div class="math-3d">
+            √(1+cos2n) &nbsp; (n² - 2n + 3)<br>
+            n ≥ n₀ : {xₙ}
+        </div>
+        <div id="tagline" data-en="MATHEMATICS FOR EVERYONE" data-ar="الرياضيات للجميع" style="font-weight:600;">MATHEMATICS FOR EVERYONE</div>
+        <div id="academyName" data-en="MATH ACADEMY" data-ar="أكاديمية الرياضيات" style="font-weight:800; font-size:2rem; margin:15px 0;">MATH ACADEMY</div>
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="openModal('login')" id="btnSignin" data-en="SIGN IN" data-ar="تسجيل دخول">SIGN IN</button>
+            <button class="btn btn-outline" onclick="openModal('register')" id="btnSignup" data-en="REGISTER" data-ar="حساب جديد">REGISTER</button>
+        </div>
+    </div>
+    <footer>© 2026 Math Academy – 3D immersive learning</footer>
+</div>
 
-        let currentUser = { email: '', name: '' };
-        let currentCode = '';
-        let currentAction = 'login';
+<!-- Modal -->
+<div id="modalRoot" class="modal-ka">
+    <div class="modal-card">
+        <span class="close-modal-x" onclick="closeModal()">&times;</span>
+        <h3 id="modalHeader">SIGN IN</h3>
+        <div class="social-row">
+            <button class="social-btn"><i class="fab fa-google"></i> Continue with Google</button>
+            <button class="social-btn"><i class="fab fa-apple"></i> Continue with Apple</button>
+            <button class="social-btn"><i class="fab fa-microsoft"></i> Continue with Microsoft</button>
+            <button class="social-btn"><i class="fab fa-facebook"></i> Continue with Facebook</button>
+        </div>
+        <div class="divider-or">OR</div>
+        <div id="loginPanel">
+            <input class="input-field" type="text" id="loginEmailUser" placeholder="Email or username">
+            <input class="input-field" type="password" id="loginPassw" placeholder="Password">
+            <div class="helper-note">Password must be at least 8 characters, letters & numbers</div>
+            <button class="btn btn-primary" style="width:100%; background:#1f6c7f;" onclick="processLogin()">Log in now!</button>
+        </div>
+        <div id="signupPanel" style="display:none;">
+            <input class="input-field" type="text" id="fullName" placeholder="Full name">
+            <input class="input-field" type="text" id="userName" placeholder="Username">
+            <input class="input-field" type="password" id="signupPass" placeholder="Password">
+            <div class="helper-note">Password must be at least 8 characters, letters & numbers</div>
+            <button class="btn btn-primary" style="width:100%; background:#1f6c7f;" onclick="processRegister()">Create account</button>
+        </div>
+        <div class="switch-action" onclick="toggleModalMode()" id="toggleTxt">Don't have an account? Sign up</div>
+        <div id="modalMsg" style="color:#ffaa88; margin-top:15px;"></div>
+    </div>
+</div>
 
-        // ===== دوال التبديل =====
-        window.showLoginForm = function() {
-            document.getElementById('loginFields').classList.remove('hidden');
-            document.getElementById('signupFields').classList.add('hidden');
-            document.getElementById('loginTabBtn').style.color = '#1f6c7f';
-            document.getElementById('loginTabBtn').style.borderBottom = '3px solid #1f6c7f';
-            document.getElementById('signupTabBtn').style.color = '#4a6f7c';
-            document.getElementById('signupTabBtn').style.borderBottom = 'none';
-            currentAction = 'login';
-        };
+<script type="module">
+    import * as THREE from 'three';
 
-        window.showSignupForm = function() {
-            document.getElementById('loginFields').classList.add('hidden');
-            document.getElementById('signupFields').classList.remove('hidden');
-            document.getElementById('signupTabBtn').style.color = '#1f6c7f';
-            document.getElementById('signupTabBtn').style.borderBottom = '3px solid #1f6c7f';
-            document.getElementById('loginTabBtn').style.color = '#4a6f7c';
-            document.getElementById('loginTabBtn').style.borderBottom = 'none';
-            currentAction = 'signup';
-        };
+    const canvas = document.getElementById('canvas-bg');
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
 
-        // ===== تسجيل دخول =====
-        window.handleLogin = function() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            const msgBox = document.getElementById('step1Message');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 20;
 
-            if (!email || !password) {
-                showMessage(msgBox, '❌ البريد وكلمة السر مطلوبان', 'error');
-                return;
-            }
+    // مجموعة من الكرات الرياضية
+    const particlesGeometry = new THREE.BufferGeometry();
+    const count = 800;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+        positions[i*3] = (Math.random() - 0.5) * 60;
+        positions[i*3+1] = (Math.random() - 0.5) * 40;
+        positions[i*3+2] = (Math.random() - 0.5) * 40 - 20;
+    }
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particleMaterial = new THREE.PointsMaterial({ color: 0x44aaff, size: 0.12, transparent: true, opacity: 0.6 });
+    const particles = new THREE.Points(particlesGeometry, particleMaterial);
+    scene.add(particles);
 
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            const user = users.find(u => u.email === email && u.password === password);
+    // مجموعة إضافية (تأثير نجوم)
+    const starGeometry = new THREE.BufferGeometry();
+    const starCount = 1200;
+    const starPos = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+        starPos[i*3] = (Math.random() - 0.5) * 200;
+        starPos[i*3+1] = (Math.random() - 0.5) * 100;
+        starPos[i*3+2] = (Math.random() - 0.5) * 80 - 40;
+    }
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    const starMaterial = new THREE.PointsMaterial({ color: 0xffaa66, size: 0.07 });
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
 
-            if (!user) {
-                showMessage(msgBox, '❌ البريد أو كلمة السر غير صحيحة', 'error');
-                return;
-            }
+    function animate() {
+        requestAnimationFrame(animate);
+        particles.rotation.y += 0.002;
+        particles.rotation.x += 0.001;
+        stars.rotation.y -= 0.0005;
+        renderer.render(scene, camera);
+    }
+    animate();
 
-            // ✅ التحقق من الموافقة
-            if (user.status !== 'approved') {
-                showMessage(msgBox, '⏳ حسابك قيد المراجعة. انتظر موافقة المشرف', 'error');
-                return;
-            }
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+</script>
 
-            currentUser = user;
-            sendVerificationCode(email, user.name, 'login');
-        };
+<script>
+    let currentLang = 'en';
+    let currentModalMode = 'login';
+    let users = JSON.parse(localStorage.getItem('users')) || [];
 
-        // ===== إنشاء حساب جديد =====
-        window.handleSignup = function() {
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value.trim();
-            const msgBox = document.getElementById('step1Message');
+    function setLanguage(lang) {
+        currentLang = lang;
+        document.documentElement.lang = lang;
+        document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+        document.querySelectorAll('[data-en][data-ar]').forEach(el => {
+            el.innerText = lang === 'ar' ? el.dataset.ar : el.dataset.en;
+        });
+        document.getElementById('btnSignin').innerText = lang === 'ar' ? 'تسجيل دخول' : 'SIGN IN';
+        document.getElementById('btnSignup').innerText = lang === 'ar' ? 'حساب جديد' : 'REGISTER';
+        document.getElementById('modalHeader').innerText = (currentModalMode === 'login') ? (lang === 'ar' ? 'تسجيل دخول' : 'SIGN IN') : (lang === 'ar' ? 'إنشاء حساب' : 'REGISTER');
+        document.getElementById('toggleTxt').innerText = (currentModalMode === 'login') ? (lang === 'ar' ? 'ليس لديك حساب؟ سجل الآن' : "Don't have an account? Sign up") : (lang === 'ar' ? 'لديك حساب؟ تسجيل دخول' : 'Already have an account? Sign in');
+        document.querySelectorAll('.lang-group button').forEach(btn => btn.classList.remove('active'));
+        if(lang === 'en') document.querySelector('.lang-group button:first-child').classList.add('active');
+        else document.querySelector('.lang-group button:last-child').classList.add('active');
+    }
 
-            if (!name || !email || !password) {
-                showMessage(msgBox, '❌ جميع الحقول مطلوبة', 'error');
-                return;
-            }
-            if (password.length < 6) {
-                showMessage(msgBox, '❌ كلمة السر 6 أحرف على الأقل', 'error');
-                return;
-            }
-
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-
-            if (users.find(u => u.email === email)) {
-                showMessage(msgBox, '❌ هذا البريد مسجل بالفعل', 'error');
-                return;
-            }
-
-            // ✅ إنشاء حساب بحالة pending (قيد المراجعة)
-            const newUser = {
-                id: Date.now(),
-                name: name,
-                email: email,
-                password: password,
-                status: 'pending',
-                createdAt: new Date().toLocaleString()
-            };
-
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
-
-            showMessage(msgBox, '✅ تم إرسال طلب التسجيل! سيتم مراجعته من قبل المشرف', 'success');
-            
-            // تنظيف الحقول
-            document.getElementById('signupName').value = '';
-            document.getElementById('signupEmail').value = '';
-            document.getElementById('signupPassword').value = '';
-
-            // الرجوع لتسجيل الدخول
-            setTimeout(() => {
-                showLoginForm();
-                msgBox.style.display = 'none';
-            }, 3000);
-        };
-
-        // ===== إرسال كود التأكيد =====
-        function sendVerificationCode(email, name, action) {
-            currentCode = Math.floor(100000 + Math.random() * 900000).toString();
-            currentAction = action;
-            
-            document.getElementById('emailDisplay').innerHTML = `<i class="fas fa-envelope"></i> ${email}`;
-            
-            emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-                to_email: email,
-                to_name: name || email.split('@')[0],
-                verification_code: currentCode,
-                time: new Date().toLocaleString('ar-EG')
-            }).then(function() {
-                console.log('📧 الكود:', currentCode);
-                
-                document.getElementById('step1').classList.remove('active');
-                document.getElementById('step2').classList.add('active');
-                document.getElementById('step1Form').classList.remove('active');
-                document.getElementById('step2Form').classList.add('active');
-                
-                showMessage(document.getElementById('step2Message'), '✅ تم إرسال الكود إلى بريدك', 'success');
-            }).catch(function(error) {
-                showMessage(document.getElementById('step1Message'), '❌ فشل إرسال الكود', 'error');
-            });
+    function openModal(mode) {
+        currentModalMode = mode;
+        const loginDiv = document.getElementById('loginPanel');
+        const signupDiv = document.getElementById('signupPanel');
+        const modalHeader = document.getElementById('modalHeader');
+        if(mode === 'login') {
+            loginDiv.style.display = 'block';
+            signupDiv.style.display = 'none';
+            modalHeader.innerText = currentLang === 'ar' ? 'تسجيل دخول' : 'SIGN IN';
+        } else {
+            loginDiv.style.display = 'none';
+            signupDiv.style.display = 'block';
+            modalHeader.innerText = currentLang === 'ar' ? 'إنشاء حساب' : 'REGISTER';
         }
+        document.getElementById('toggleTxt').innerText = mode === 'login' ? (currentLang === 'ar' ? 'ليس لديك حساب؟ سجل الآن' : "Don't have an account? Sign up") : (currentLang === 'ar' ? 'لديك حساب؟ تسجيل دخول' : 'Already have an account? Sign in');
+        document.getElementById('modalRoot').style.display = 'flex';
+        document.getElementById('modalMsg').innerText = '';
+    }
 
-        // ===== التحقق من الكود =====
-        window.verifyCode = function() {
-            const code = document.getElementById('codeInput').value.trim();
-            const msgBox = document.getElementById('step2Message');
+    function closeModal() { document.getElementById('modalRoot').style.display = 'none'; }
 
-            if (!code) {
-                showMessage(msgBox, '❌ أدخل كود التأكيد', 'error');
-                return;
-            }
-            if (code.length !== 6 || !/^\d+$/.test(code)) {
-                showMessage(msgBox, '❌ الكود 6 أرقام فقط', 'error');
-                return;
-            }
+    function toggleModalMode() {
+        if(currentModalMode === 'login') openModal('register');
+        else openModal('login');
+    }
 
-            if (code === currentCode) {
-                showMessage(msgBox, '✅ تم التحقق بنجاح!', 'success');
-                
-                if (currentAction === 'login') {
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    document.getElementById('successTitle').innerText = 'مرحباً بك!';
-                    document.getElementById('successMessage').innerText = 'جاري تحويلك إلى المنصة...';
-                    
-                    setTimeout(() => { window.location.href = 'home.html'; }, 2000);
-                }
-                
-                document.getElementById('step2').classList.remove('active');
-                document.getElementById('step3').classList.add('active');
-                document.getElementById('step2Form').classList.remove('active');
-                document.getElementById('step3Form').classList.add('active');
-            } else {
-                showMessage(msgBox, '❌ كود غير صحيح', 'error');
-            }
-        };
+    function processLogin() {
+        const email = document.getElementById('loginEmailUser').value.trim();
+        const pass = document.getElementById('loginPassw').value.trim();
+        const user = users.find(u => (u.email === email || u.username === email) && u.password === pass);
+        if(!user) { document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'بيانات غير صحيحة' : 'Invalid credentials'; return; }
+        if(user.status !== 'approved') { document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'حسابك قيد المراجعة' : 'Account pending approval'; return; }
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        window.location.href = 'home.html';
+    }
 
-        // ===== إعادة إرسال الكود =====
-        window.resendCode = function() {
-            currentCode = Math.floor(100000 + Math.random() * 900000).toString();
-            
-            emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-                to_email: currentUser.email,
-                to_name: currentUser.name || currentUser.email.split('@')[0],
-                verification_code: currentCode,
-                time: new Date().toLocaleString('ar-EG')
-            }).then(function() {
-                showMessage(document.getElementById('step2Message'), '✅ تم إعادة إرسال الكود', 'success');
-                console.log('📧 الكود الجديد:', currentCode);
-            }).catch(function(error) {
-                showMessage(document.getElementById('step2Message'), '❌ فشل إعادة الإرسال', 'error');
-            });
-        };
-
-        function showMessage(element, text, type) {
-            element.style.display = 'block';
-            element.textContent = text;
-            element.className = 'message ' + (type === 'error' ? 'error-msg' : 'success-msg');
-            setTimeout(() => { element.style.display = 'none'; }, 4000);
+    function processRegister() {
+        const name = document.getElementById('fullName').value.trim();
+        const username = document.getElementById('userName').value.trim();
+        const pass = document.getElementById('signupPass').value.trim();
+        if(!name || !username || pass.length < 8) {
+            document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'املأ الحقول وكلمة السر 8 أحرف' : 'Fill fields & password 8+ chars';
+            return;
         }
-
-        window.onload = function() {
-            const user = localStorage.getItem('currentUser');
-            if (user) window.location.href = 'home.html';
+        if(users.find(u => u.username === username || u.email === username)) {
+            document.getElementById('modalMsg').innerText = currentLang === 'ar' ? 'اسم المستخدم موجود' : 'Username exists';
+            return;
+        }
+        const newUser = {
+            id: Date.now(),
+            name, username,
+            email: username,
+            password: pass,
+            status: 'pending',
+            createdAt: new Date().toLocaleString()
         };
-    </script>
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        document.getElementById('modalMsg').style.color = '#8affb0';
+        document.getElementById('modalMsg').innerText = currentLang === 'ar' ? '✅ تم الطلب ، انتظر موافقة المشرف' : '✅ Request sent, wait for admin';
+        setTimeout(() => closeModal(), 2000);
+    }
+
+    window.onclick = (e) => { if(e.target === document.getElementById('modalRoot')) closeModal(); };
+    setLanguage('en');
+</script>
 </body>
 </html>
